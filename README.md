@@ -1,18 +1,12 @@
-# Welcome to your Lovable project
+# Welcome to our this project
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/a8387fca-1640-4427-a3f3-574d230aefec
+bhelpuriexpress.web.app
 
 ## How can I edit this code?
 
 There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/a8387fca-1640-4427-a3f3-574d230aefec) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
 
 **Use your preferred IDE**
 
@@ -62,12 +56,8 @@ This project is built with:
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/a8387fca-1640-4427-a3f3-574d230aefec) and click on Share -> Publish.
+Use firebase
 
-## Can I connect a custom domain to my Lovable project?
+## Can I connect a custom domain to my Firebase project?
 
 Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
