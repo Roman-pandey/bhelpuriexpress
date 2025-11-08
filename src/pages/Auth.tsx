@@ -8,6 +8,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+
 
 const authSchema = z.object({
   email: z.string().trim().email({ message: 'Invalid email address' }).max(255),
@@ -18,6 +21,9 @@ const Auth = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+  const [showReset, setShowReset] = useState(false);
+
   const { signup, login, currentUser } = useAuth();
   const navigate = useNavigate();
 
@@ -59,6 +65,30 @@ const Auth = () => {
       setLoading(false);
     }
   };
+
+  // 👇 Add this directly below handleSubmit
+const handlePasswordReset = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  if (!resetEmail.trim()) {
+    toast.error("Please enter your email address.");
+    return;
+  }
+
+  try {
+    await sendPasswordResetEmail(auth, resetEmail.trim());
+    toast.success("Password reset email sent! Check your inbox.");
+    setShowReset(false);
+    setResetEmail("");
+  } catch (error: any) {
+    if (error.code === "auth/user-not-found") {
+      toast.error("No user found with that email.");
+    } else {
+      toast.error("Failed to send reset email. Please try again.");
+    }
+  }
+};
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12">
@@ -108,6 +138,16 @@ const Auth = () => {
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? 'Logging in...' : 'Login'}
                 </Button>
+                <p className="text-sm text-center mt-2">
+  <button
+    type="button"
+    onClick={() => setShowReset(true)}
+    className="text-blue-600 hover:underline"
+  >
+    Forgot Password?
+  </button>
+</p>
+
               </form>
             </TabsContent>
             <TabsContent value="signup">
@@ -145,6 +185,38 @@ const Auth = () => {
                 </Button>
               </form>
             </TabsContent>
+            {showReset && (
+  <div className="mt-6 p-4 border rounded-md bg-gray-50">
+    <h3 className="text-lg font-semibold mb-3 text-center">
+      Reset Password
+    </h3>
+    <form onSubmit={handlePasswordReset} className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="reset-email">Email</Label>
+        <Input
+          id="reset-email"
+          type="email"
+          placeholder="your.email@college.edu"
+          value={resetEmail}
+          onChange={(e) => setResetEmail(e.target.value)}
+          required
+        />
+      </div>
+      <Button type="submit" className="w-full">
+        Send Reset Email
+      </Button>
+      <Button
+        type="button"
+        variant="outline"
+        className="w-full"
+        onClick={() => setShowReset(false)}
+      >
+        Back to Login
+      </Button>
+    </form>
+  </div>
+)}
+
           </Tabs>
         </CardContent>
       </Card>
